@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, {useState, forwardRef} from "react";
 import SimpleBar from 'simplebar-react';
 import { useLocation } from "react-router-dom";
 import { CSSTransition } from 'react-transition-group';
@@ -12,6 +12,11 @@ import { Routes } from "../routes";
 import ThemesbergLogo from "../assets/img/themesberg.svg";
 import ReactHero from "../assets/img/technologies/react-hero-logo.svg";
 import ProfilePicture from "../assets/img/team/profile-picture-3.jpg";
+import {overview, settings, tables, transactions} from "../interactive guide/Guides";
+import {useInteractiveGuide} from "../interactive guide/Utils";
+
+
+
 
 export default (props = {}) => {
   const location = useLocation();
@@ -19,41 +24,43 @@ export default (props = {}) => {
   const [show, setShow] = useState(false);
   const showClass = show ? "show" : "";
 
+
   const onCollapse = () => setShow(!show);
 
-  const CollapsableNavItem = (props) => {
-    const { eventKey, title, icon, children = null } = props;
-    const defaultKey = pathname.indexOf(eventKey) !== -1 ? eventKey : "";
+  const CollapsableNavItem = forwardRef((props, ref) => {
+        const {eventKey, title, icon, children = null} = props;
+        const defaultKey = pathname.indexOf(eventKey) !== -1 ? eventKey : "";
 
-    return (
-      <Accordion as={Nav.Item} defaultActiveKey={defaultKey}>
-        <Accordion.Item eventKey={eventKey}>
-          <Accordion.Button as={Nav.Link} className="d-flex justify-content-between align-items-center">
+        return (
+            <Accordion as={Nav.Item} defaultActiveKey={defaultKey} >
+              <Accordion.Item eventKey={eventKey} ref={ref}>
+                <Accordion.Button as={Nav.Link} className="d-flex justify-content-between align-items-center">
             <span>
-              <span className="sidebar-icon"><FontAwesomeIcon icon={icon} /> </span>
+              <span className="sidebar-icon"><FontAwesomeIcon icon={icon}/></span>
               <span className="sidebar-text">{title}</span>
             </span>
-          </Accordion.Button>
-          <Accordion.Body className="multi-level">
-            <Nav className="flex-column">
-              {children}
-            </Nav>
-          </Accordion.Body>
-        </Accordion.Item>
-      </Accordion>
-    );
-  };
+                </Accordion.Button>
+                <Accordion.Body className="multi-level">
+                  <Nav className="flex-column">
+                    {children}
+                  </Nav>
+                </Accordion.Body>
+              </Accordion.Item>
+            </Accordion>
+        );
+      }
+  )
 
-  const NavItem = (props) => {
-    const { title, link, external, target, icon, image, badgeText, badgeBg = "secondary", badgeColor = "primary" } = props;
+  const NavItem = forwardRef((props, ref) => {
+    const { title, link, external, target, icon, image, badgeText, badgeBg = "secondary", badgeColor = "primary"} = props;
     const classNames = badgeText ? "d-flex justify-content-start align-items-center justify-content-between" : "";
     const navItemClassName = link === pathname ? "active" : "";
     const linkProps = external ? { href: link } : { as: Link, to: link };
 
     return (
-      <Nav.Item className={navItemClassName} onClick={() => setShow(false)}>
+      <Nav.Item ref={ref} className={navItemClassName} onClick={() => setShow(false)}>
         <Nav.Link {...linkProps} target={target} className={classNames}>
-          <span>
+          <span >
             {icon ? <span className="sidebar-icon"><FontAwesomeIcon icon={icon} /> </span> : null}
             {image ? <Image src={image} width={20} height={20} className="sidebar-icon svg-icon" /> : null}
 
@@ -65,8 +72,9 @@ export default (props = {}) => {
         </Nav.Link>
       </Nav.Item>
     );
-  };
-
+  }
+)
+  const setInteractiveGuide = useInteractiveGuide();
   return (
     <>
       <Navbar expand={false} collapseOnSelect variant="dark" className="navbar-theme-primary px-4 d-md-none">
@@ -99,11 +107,11 @@ export default (props = {}) => {
             <Nav className="flex-column pt-3 pt-md-0">
               <NavItem title="Volt React" link={Routes.Presentation.path} image={ReactHero} />
 
-              <NavItem title="Overview" link={Routes.DashboardOverview.path} icon={faChartPie} />
-              <NavItem title="Transactions" icon={faHandHoldingUsd} link={Routes.Transactions.path} />
-              <NavItem title="Settings" icon={faCog} link={Routes.Settings.path} />
+              <NavItem ref={(ref) => setInteractiveGuide(ref, overview)} title="Overview" link={Routes.DashboardOverview.path} icon={faChartPie} />
+              <NavItem ref={(ref) => setInteractiveGuide(ref, transactions)} title="Transactions" icon={faHandHoldingUsd} link={Routes.Transactions.path} />
+              <NavItem ref={(ref) => setInteractiveGuide(ref, settings)} title="Settings" icon={faCog} link={Routes.Settings.path} />
 
-              <CollapsableNavItem eventKey="tables/" title="Tables" icon={faTable}>
+              <CollapsableNavItem ref={(ref) => setInteractiveGuide(ref, tables)} eventKey="tables/" title="Tables" icon={faTable}>
                 <NavItem title="Bootstrap Table" link={Routes.BootstrapTables.path} />
               </CollapsableNavItem>
 

@@ -4,8 +4,11 @@ import { faCheck, faCog, faHome, faSearch } from '@fortawesome/free-solid-svg-ic
 import { Col, Row, Form, Button, ButtonGroup, Breadcrumb, InputGroup, Dropdown } from '@themesberg/react-bootstrap';
 
 import { TransactionsTable } from "../components/Tables";
+import {transactionsTable} from "../interactive guide/Guides";
+import {useInteractiveGuide} from "../interactive guide/Utils";
 
 export default () => {
+  const setInteractiveGuide = useInteractiveGuide();
   return (
     <>
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
@@ -26,7 +29,7 @@ export default () => {
         </div>
       </div>
 
-      <div className="table-settings mb-4">
+      <div  className="table-settings mb-4">
         <Row className="justify-content-between align-items-center">
           <Col xs={8} md={6} lg={3} xl={4}>
             <InputGroup>
@@ -56,7 +59,7 @@ export default () => {
         </Row>
       </div>
 
-      <TransactionsTable />
+      <TransactionsTable ref={(ref) => setInteractiveGuide(ref, transactionsTable)} />
     </>
   );
 };

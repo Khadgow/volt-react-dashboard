@@ -6,9 +6,12 @@ import { ChoosePhotoWidget, ProfileCardWidget } from "../components/Widgets";
 import { GeneralInfoForm } from "../components/Forms";
 
 import Profile3 from "../assets/img/team/profile-picture-3.jpg";
+import {profileData} from "../interactive guide/Guides";
+import {useInteractiveGuide} from "../interactive guide/Utils";
 
 
 export default () => {
+  const setInteractiveGuide = useInteractiveGuide();
   return (
     <>
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
@@ -68,7 +71,7 @@ export default () => {
 
       <Row>
         <Col xs={12} xl={8}>
-          <GeneralInfoForm />
+          <GeneralInfoForm ref={(ref) => setInteractiveGuide(ref, profileData)} />
         </Col>
 
         <Col xs={12} xl={4}>

@@ -7,8 +7,19 @@ import { Col, Row, Button, Dropdown, ButtonGroup } from '@themesberg/react-boots
 import { CounterWidget, CircleChartWidget, BarChartWidget, TeamMembersWidget, ProgressTrackWidget, RankingWidget, SalesValueWidget, SalesValueWidgetPhone, AcquisitionWidget } from "../../components/Widgets";
 import { PageVisitsTable } from "../../components/Tables";
 import { trafficShares, totalOrders } from "../../data/charts";
+import {
+  acquisitionWidget,
+  barChartWidget,
+  circleChartWidgetTraffic,
+  counterWidgetCustomers,
+  counterWidgetRevenue, pageVisitsTable, progressTrackWidget, rankingWidget,
+  salesValueWidget, teamMembersWidget
+} from "../../interactive guide/Guides";
+import {useInteractiveGuide} from "../../interactive guide/Utils";
 
 export default () => {
+
+  const setInteractiveGuide =useInteractiveGuide();
   return (
     <>
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
@@ -43,7 +54,8 @@ export default () => {
 
       <Row className="justify-content-md-center">
         <Col xs={12} className="mb-4 d-none d-sm-block">
-          <SalesValueWidget
+
+          <SalesValueWidget ref={(ref)=>setInteractiveGuide(ref,salesValueWidget)}
             title="Sales Value"
             value="10,567"
             percentage={10.57}
@@ -57,7 +69,7 @@ export default () => {
           />
         </Col>
         <Col xs={12} sm={6} xl={4} className="mb-4">
-          <CounterWidget
+          <CounterWidget ref={(ref)=>setInteractiveGuide(ref, counterWidgetCustomers)}
             category="Customers"
             title="345k"
             period="Feb 1 - Apr 1"
@@ -68,7 +80,7 @@ export default () => {
         </Col>
 
         <Col xs={12} sm={6} xl={4} className="mb-4">
-          <CounterWidget
+          <CounterWidget ref={(ref)=>setInteractiveGuide(ref, counterWidgetRevenue)}
             category="Revenue"
             title="$43,594"
             period="Feb 1 - Apr 1"
@@ -79,7 +91,7 @@ export default () => {
         </Col>
 
         <Col xs={12} sm={6} xl={4} className="mb-4">
-          <CircleChartWidget
+          <CircleChartWidget ref={(ref)=>setInteractiveGuide(ref, circleChartWidgetTraffic)}
             title="Traffic Share"
             data={trafficShares} />
         </Col>
@@ -91,15 +103,15 @@ export default () => {
             <Col xs={12} xl={8} className="mb-4">
               <Row>
                 <Col xs={12} className="mb-4">
-                  <PageVisitsTable />
+                  <PageVisitsTable ref={(ref)=>setInteractiveGuide(ref, pageVisitsTable)} />
                 </Col>
 
                 <Col xs={12} lg={6} className="mb-4">
-                  <TeamMembersWidget />
+                  <TeamMembersWidget ref={(ref)=>setInteractiveGuide(ref, teamMembersWidget)} />
                 </Col>
 
                 <Col xs={12} lg={6} className="mb-4">
-                  <ProgressTrackWidget />
+                  <ProgressTrackWidget ref={(ref)=>setInteractiveGuide(ref, progressTrackWidget)} />
                 </Col>
               </Row>
             </Col>
@@ -111,15 +123,16 @@ export default () => {
                     title="Total orders"
                     value={452}
                     percentage={18.2}
-                    data={totalOrders} />
+                    data={totalOrders}
+                  ref={(ref)=>setInteractiveGuide(ref, barChartWidget)}/>
                 </Col>
 
                 <Col xs={12} className="px-0 mb-4">
-                  <RankingWidget />
+                  <RankingWidget ref={(ref)=>setInteractiveGuide(ref, rankingWidget)}/>
                 </Col>
 
                 <Col xs={12} className="px-0">
-                  <AcquisitionWidget />
+                  <AcquisitionWidget ref={(ref)=>setInteractiveGuide(ref, acquisitionWidget)} />
                 </Col>
               </Row>
             </Col>
